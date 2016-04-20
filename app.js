@@ -2,6 +2,8 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var passport = require('passport');
+
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -9,6 +11,8 @@ var mongoose = require('mongoose');
 //database models 
 require('./models/Comments');
 require('./models/Posts');
+require('./models/Users');
+require('./config/passport');
 
 //database connection
 //using mongoose library
@@ -16,7 +20,8 @@ require('./models/Posts');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var posts = require('./routes/posts');
-
+var register = require('./routes/register');
+var login = require('./routes/login');
 
 
 mongoose.connect('mongodb://localhost:27017/news');
@@ -34,10 +39,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/posts',posts);
+app.use('/register',register);
+app.use('/login',login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
