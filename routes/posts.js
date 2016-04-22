@@ -101,7 +101,7 @@ router.param('comment', function(req, res, next, id) {
     return next();
   });
 });
-//todo auth
+
 router.put('/:post/comments/:comment/upvote', auth,function(req, res, next) {
   req.comment.upvote(function(err, comment){
     if (err) { return next(err); }
@@ -110,5 +110,12 @@ router.put('/:post/comments/:comment/upvote', auth,function(req, res, next) {
   });
 });
 
+router.put('/:post/comments/:comment/downvote', auth,function(req, res, next) {
+  req.comment.upvote(function(err, comment){
+    if (err) { return next(err); }
+
+    res.json(comment);
+  });
+});
 
 module.exports = router;
