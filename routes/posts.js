@@ -39,7 +39,7 @@ router.param('post', function(req, res, next, id) {
 });
 
 router.get('/:post', function(req, res) {
-  req.post.populate('comments', function(err, post) {
+  req.post.populate('comments').populate('upvotedUser', function(err, post) {
     if (err) { return next(err); }
 
     res.json(post);
@@ -48,15 +48,15 @@ router.get('/:post', function(req, res) {
 
 
 router.put('/:post/upvote', auth,function(req, res, next) {
-  req.post.upvote(function(err, post){
+  req.post.upvote(req.payload,function(err, post){
     if (err) { return next(err); }
-
+    
     res.json(post);
   });
 });
 
 router.put('/:post/downvote', auth,function(req, res, next) {
-  req.post.downvote(function(err, post){
+  req.post.downvote(req.payload,function(err, post){
     if (err) { return next(err); }
 
     res.json(post);
@@ -111,7 +111,7 @@ router.put('/:post/comments/:comment/upvote', auth,function(req, res, next) {
 });
 
 router.put('/:post/comments/:comment/downvote', auth,function(req, res, next) {
-  req.comment.upvote(function(err, comment){
+  req.comment.downvote(function(err, comment){
     if (err) { return next(err); }
 
     res.json(comment);
